@@ -2,8 +2,8 @@ import streamlit as st
 import PyPDF2
 from huggingface_hub import InferenceClient
 
-# Initialize DeepSeek client
-client = InferenceClient()
+# Initialize DeepSeek client with the model ID
+client = InferenceClient(model="deepseek-ai/DeepSeek-V3-0324")
 model_id = "deepseek-ai/DeepSeek-V3-0324"
 
 def extract_text_from_pdf(uploaded_file):
@@ -24,8 +24,7 @@ def ask_deepseek(context, question):
         {"role": "user", "content": f"Context:\n{context}\n\nQuestion: {question}"}
     ]
 
-    completion = client.chat.completions.create(
-        model=model_id,
+    completion = client.chat_completion(
         messages=messages,
     )
     return completion.choices[0].message.content
